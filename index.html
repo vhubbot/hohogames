@@ -1,160 +1,1342 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>HoHo Games</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoHo Games - Unblocked Games</title>
+    <meta name="description" content="HoHo Games - Play unblocked games">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="images2/acc.png" type="image/x-icon">
     <style>
-        body { 
-            font-family: Arial; 
-            margin:0; 
-            overflow:hidden;
-            background:black;
-            color:white;
+        /* VARIABLES */
+        :root {
+            --bg: #1e1e1e;
+            --accent: #ff4757; /* Default HoHo Red */
+            --light-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --panel-bg: rgba(45, 45, 45, 0.95);
+            --border-radius: 12px;
+            --shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            --transition-time: 0.3s;
+            --wallpaper: var(--bg); /* Used for background color when no image is set */
         }
 
-        /* Canvas para partículas */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* GENERAL STYLES */
+        body {
+            background: var(--wallpaper);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            transition: background-image 0.5s, background-color 0.5s;
+        }
+
         #particles {
             position: fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            z-index:-1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
 
-        h1 { 
-            text-align:center; 
-            padding:20px; 
-            margin:0; 
-            background:rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
+        /* --- HEADER & CONTROLS --- */
+        header {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .grid { 
-            display:grid; 
-            grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); 
-            gap:20px; 
-            padding:20px; 
+        #logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 5px rgba(255, 71, 87, 0.5);
+            letter-spacing: 1px;
+            transition: transform 0.2s;
+        }
+        
+        #logo:hover {
+            transform: scale(1.05);
         }
 
-        .game { 
-            background:white; 
-            border-radius:8px; 
-            padding:10px; 
-            text-align:center; 
-            box-shadow:0 2px 5px rgba(255,255,255,0.3);
-            transform:scale(1);
-            transition:transform 0.25s, box-shadow 0.25s;
+        #controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #controls button {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.2s, color 0.2s, transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        #controls button:hover {
+            background-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        #user-display {
+            display: none; /* Hidden until login */
+            align-items: center;
+            gap: 10px;
+            padding: 5px 10px;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+        
+        #header-profile-pic {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        #header-username {
+            font-weight: 600;
+        }
+        
+        #current-time {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            padding: 5px 10px;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+        }
+
+
+        /* --- SEARCH BAR --- */
+        #search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        #game-search {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--accent);
+            border-radius: var(--border-radius);
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            outline: none;
+            transition: box-shadow 0.3s;
+        }
+
+        #game-search:focus {
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
+        }
+        
+        #search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        /* --- GAMES GRID --- */
+        #games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        #games-grid.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .game {
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
         }
 
         .game:hover {
-            transform:scale(1.07);
-            box-shadow:0 0 20px rgba(255,255,255,0.6);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
         }
 
-        .game img { 
-            width:100%; 
-            height:140px; 
-            object-fit:cover; 
-            border-radius:6px; 
+        .game img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--accent);
         }
 
-        .game-title { 
-            margin-top:10px; 
-            font-weight:bold; 
-            color:black; 
+        .game-title {
+            padding: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        a { 
-            text-decoration:none; 
-            color:black; 
+        /* --- MODAL PANELS (Settings, Account, Wallpaper) --- */
+        .modal-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 450px;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-time), visibility var(--transition-time), transform var(--transition-time);
+            border: 1px solid var(--accent);
+        }
+
+        .modal-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-panel h2 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 5px;
+        }
+
+        .panel-row {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-row label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .panel-row input[type="text"],
+        .panel-row input[type="url"],
+        .panel-row select,
+        .panel-row input[type="color"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-bg);
+            border-radius: 8px;
+            background-color: #1e1e1e;
+            color: var(--text-color);
+            outline: none;
+        }
+        
+        .panel-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .panel-actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s, opacity 0.2s;
+        }
+        
+        #settings-save, #wallpaper-apply {
+            background-color: var(--accent);
+            color: var(--text-color);
+        }
+        
+        #settings-save:hover, #wallpaper-apply:hover {
+            opacity: 0.9;
+        }
+
+        /* --- ACCOUNT PANEL SPECIFIC --- */
+        #account-panel .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        #account-panel .profile-info img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+        }
+
+        #account-panel .profile-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #display-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        #display-username {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        #profile-pic-uploader {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        #profile-pic-uploader input[type="file"] {
+            display: none;
+        }
+        
+        #profile-pic-uploader label {
+            background-color: var(--accent);
+            color: var(--text-color);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        
+        #profile-pic-uploader label:hover {
+            opacity: 0.9;
+        }
+
+        #profile-selector {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--light-bg);
+        }
+        
+        .profile-option img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        
+        .profile-option img:hover {
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+        
+        #logout-btn {
+            background-color: #d63031;
+            color: var(--text-color);
+        }
+
+        /* --- GAME VIEWER MODAL --- */
+        #game-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        #game-viewer.active {
+            opacity: 1;
+        }
+
+        #viewer-header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        #viewer-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--text-color);
+        }
+        
+        #viewer-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        #viewer-controls button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #viewer-play {
+            background-color: #2ecc71;
+        }
+        
+        #viewer-newtab {
+            background-color: #3498db;
+        }
+        
+        #viewer-newtab-blank { 
+            background-color: #9b59b6; 
+        }
+
+        #viewer-close {
+            background-color: #e74c3c;
+        }
+
+        #viewer-frame {
+            width: 100%;
+            max-width: 900px;
+            height: calc(100vh - 100px);
+            border: 2px solid var(--accent);
+            border-radius: var(--border-radius);
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        #viewer-frame.active {
+            opacity: 1;
+        }
+        
+        .viewer-placeholder {
+            width: 100%;
+            max-width: 900px;
+            height: calc(100vh - 100px);
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .viewer-placeholder p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        /* --- LOGIN OVERLAYS --- */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s;
+        }
+        
+        .login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-card {
+            background-color: var(--panel-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            border: 2px solid var(--accent);
+        }
+
+        .login-card h2 {
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-size: 2rem;
+        }
+        
+        .login-card p {
+            margin-bottom: 20px;
+        }
+        
+        .login-card input[type="text"],
+        .login-card input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            background-color: #1e1e1e;
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .file-upload-box {
+            background-color: var(--light-bg);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.2s;
+        }
+        
+        .file-upload-box:hover {
+            background-color: #3a3a3a;
+        }
+        
+        .file-upload-box label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+        
+        .file-upload-box input[type="file"] {
+            display: none;
+        }
+
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--accent);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .login-button:hover {
+            opacity: 0.9;
+        }
+        
+        #re-login-overlay .login-button {
+            margin-bottom: 15px;
+        }
+        
+        #forgot-password-link {
+            color: var(--accent);
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            #controls {
+                justify-content: center;
+                width: 100%;
+            }
+            #games-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <audio id="click-sound" src="sounds/click.mp3" preload="auto"></audio>
 
-<canvas id="particles"></canvas>
+    <canvas id="particles"></canvas>
 
-<h1>Welcome to HoHo Games</h1>
-<div style="padding: 8px 20px; text-align:center; background: rgba(0,0,0,0.0);">
-    <input id="game-search" placeholder="Search games..." style="max-width:320px;width:50%;padding:8px 10px;border-radius:8px;border:1px solid #313131;background:#0b0b0b;color:#fff;outline:none;" />
-</div>
+    <header>
+        <a href="#" id="logo">HoHo Games</a>
+        <div id="controls">
+            <div id="current-time">00:00:00 AM</div>
+            <div id="user-display" style="display: none;">
+                <img id="header-profile-pic" src="images2/acc.png" alt="Profile Picture">
+                <span id="header-username">User</span>
+            </div>
+            <button id="quick-wallpaper-btn" title="Wallpaper Settings"><i class="fas fa-image"></i></button>
+            <button id="settings-btn" title="Settings"><i class="fas fa-cog"></i></button>
+            <button id="account-btn" title="Account Hub"><i class="fas fa-user-circle"></i></button>
+        </div>
+    </header>
 
-<div class="grid" id="games-grid">
-    <!-- Tus juegos en 1 línea -->
-    <a href="games/Tag.html" class="game"><img src="img/tag.png"><div class="game-title">Tag</div></a>
-    <a href="games/eaglercraft.html" class="game"><img src="img/eaglercraft.png"><div class="game-title">eaglercraft</div></a>
-    <a href="games/badparenting/" class="game"><img src="img/badparenting.png"><div class="game-title">bad parenting</div></a>
-    <a href="games/bunny-ada/" class="game"><img src="img/bunnyada.gif"><div class="game-title">bunny ada</div></a>
-    <a href="games/scramjet/" class="game"><img src="img/bunnyagif"><div class="game-title">scramjet</div></a>
-</div>
+    <div id="search-container">
+        <input type="text" id="game-search" placeholder="Search games...">
+        <i class="fas fa-search" id="search-icon"></i>
+    </div>
 
-<script>
-// Partículas
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
+    <main id="games-grid">
+        </main>
+    
+    <div id="settings-panel" class="modal-panel">
+        <h2><i class="fas fa-cog"></i> Settings</h2>
+        
+        <div class="panel-row">
+            <label for="theme-picker">Theme Color (Accent)</label>
+            <input type="color" id="theme-picker" value="#ff4757">
+        </div>
+        
+        <div class="panel-row">
+            <label for="particle-select">Background Particles</label>
+            <select id="particle-select">
+                <option value="stars">Stars (Default)</option>
+                <option value="bubbles">Bubbles</option>
+                <option value="triangles">Triangles</option>
+                <option value="off">Off</option>
+            </select>
+        </div>
+        
+        <div class="panel-row">
+            <label for="hotkey-input">Panic Hotkey (Key)</label>
+            <input type="text" id="hotkey-input" placeholder="e.g., Q or 1" maxlength="1">
+        </div>
+        
+        <div class="panel-row">
+            <label for="hotkey-destination">Panic Destination</label>
+            <select id="hotkey-destination">
+                <option value="https://www.google.com/">Google</option>
+                <option value="https://www.wikipedia.org/">Wikipedia</option>
+                <option value="custom">Custom URL (Use 'about:blank' here to clear the current page)</option>
+            </select>
+        </div>
+        
+        <div class="panel-row" id="custom-url-container" style="display:none;">
+            <input type="url" id="custom-url-input" placeholder="https://example.com or about:blank">
+        </div>
 
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-resize();
-window.onresize = resize;
+        <div class="panel-actions">
+            <button id="settings-save">Save Settings</button>
+        </div>
+    </div>
+    
+    <div id="wallpaper-panel" class="modal-panel">
+        <h2><i class="fas fa-image"></i> Wallpaper</h2>
+        
+        <div class="panel-row">
+            <label>Upload Image File</label>
+            <input type="file" id="wallpaper-file-input" accept="image/*">
+        </div>
+        
+        <div class="panel-row">
+            <label>Image URL</label>
+            <input type="url" id="wallpaper-url-input" placeholder="Paste image address">
+        </div>
 
-const particles = [];
-for (let i = 0; i < 120; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: 2 + Math.random() * 3,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5
-    });
-}
+        <div class="panel-actions">
+            <button id="wallpaper-reset">Reset</button>
+            <button id="wallpaper-apply">Apply Wallpaper</button>
+        </div>
+    </div>
 
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "white";
-    particles.forEach(p => {
-        p.x += p.speedX;
-        p.y += p.speedY;
+    <div id="account-panel" class="modal-panel">
+        <h2><i class="fas fa-user-circle"></i> Account Hub</h2>
+        
+        <div class="profile-info">
+            <img id="profile-pic" src="images2/acc.png" alt="Profile Picture">
+            <div class="profile-details">
+                <span id="display-name">Username</span>
+                <span id="display-username">@username</span>
+            </div>
+        </div>
+        
+        <div class="panel-row">
+            <label>Change Profile Picture (Upload)</label>
+            <div id="profile-pic-uploader">
+                <input type="file" id="profile-pic-input" accept="image/*">
+                <label for="profile-pic-input">Select Image</label>
+            </div>
+        </div>
+        
+        <div class="panel-row">
+            <label>Quick Select Profile</label>
+            <div id="profile-selector">
+                <div class="profile-option"><img src="images2/acc.png" data-src="images2/acc.png" alt="Default"></div>
+                <div class="profile-option"><img src="images2/acc-cat.png" data-src="images2/acc-cat.png" alt="Cat"></div>
+                <div class="profile-option"><img src="images2/acc-gamer.png" data-src="images2/acc-gamer.png" alt="Gamer"></div>
+                <div class="profile-option"><img src="images2/acc-astro.png" data-src="images2/acc-astro.png" alt="Astro"></div>
+            </div>
+        </div>
+        
+        <div class="panel-actions" style="border-top: 1px dashed var(--light-bg); padding-top: 20px;">
+            <button id="change-password-btn" style="background-color: #3498db; color: var(--text-color);">Change Password</button>
+            <button id="logout-btn">Log Out</button>
+        </div>
+    </div>
 
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-    });
+    <div id="game-viewer" data-src="">
+        <div id="viewer-header">
+            <h2 id="viewer-title">Game Title</h2>
+            <div id="viewer-controls">
+                <button id="viewer-play"><i class="fas fa-play"></i> Play</button>
+                <button id="viewer-newtab"><i class="fas fa-external-link-alt"></i> New Tab (Normal)</button>
+                <button id="viewer-newtab-blank"><i class="fas fa-mask"></i> New Tab Blank (Stealth)</button> 
+                <button id="viewer-close"><i class="fas fa-times"></i> Close</button>
+            </div>
+        </div>
+        <div class="viewer-placeholder">
+            <i class="fas fa-gamepad" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
+            <p>Click 'Play' to launch the game!</p>
+        </div>
+        <iframe id="viewer-frame" frameborder="0" allowfullscreen></iframe>
+    </div>
 
-    requestAnimationFrame(animate);
-}
-animate();
 
-// Búsqueda de juegos
-const searchInput = document.getElementById('game-search');
-const grid = document.getElementById('games-grid');
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-card">
+            <h2>HoHo Games</h2>
+            <p>Create your account to unlock all features.</p>
+            <input type="text" id="username-input" placeholder="Username" required>
+            <input type="password" id="password-input" placeholder="Password (4+ characters)" required>
+            
+            <div class="file-upload-box">
+                <label for="initial-profile-pic-input" id="initial-pic-text">
+                    👤 Select Profile Picture
+                </label>
+                <input type="file" id="initial-profile-pic-input" accept="image/*">
+            </div>
+            
+            <button id="login-create" class="login-button">Create Account</button>
+        </div>
+    </div>
+    
+    <div id="re-login-overlay" class="login-overlay hidden">
+        <div class="login-card">
+            <h2 id="welcome-back-msg">Welcome back, User!</h2>
+            <p>Enter your password to continue.</p>
+            <input type="password" id="re-password-input" placeholder="Password" required>
+            <button id="re-login-btn" class="login-button">Log In</button>
+            <span id="forgot-password-link">Forgot Password? (Reset Account)</span>
+        </div>
+    </div>
 
-searchInput.addEventListener('input', (e) => {
-    const q = e.target.value.trim().toLowerCase();
-    const games = grid.querySelectorAll('.game');
-    games.forEach(g => {
-        const titleEl = g.querySelector('.game-title');
-        const title = titleEl ? titleEl.textContent.toLowerCase() : '';
-        const href = (g.getAttribute('href') || '').toLowerCase();
-        g.style.display = (!q || title.includes(q) || href.includes(q)) ? '' : 'none';
-    });
-});
 
-searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        const first = Array.from(grid.querySelectorAll('.game')).find(g => g.style.display !== 'none');
-        if (first) window.location.href = first.getAttribute('href');
-    }
-});
-</script>
+    <script> 
+        // --- CORE UTILITY FUNCTIONS ---
 
+        // Click sound setup 
+        const clickSound = document.getElementById("click-sound"); 
+        function playClick() { 
+            // Check if the sound file actually exists (prevents console errors if user doesn't have it)
+            if (clickSound && clickSound.src) {
+                clickSound.currentTime = 0; 
+                clickSound.play().catch(() => {}); // Catch error if sound is blocked
+            }
+        } 
+        // Attach click sound to all interactive elements
+        document.querySelectorAll("button").forEach(btn => btn.addEventListener("click", playClick)); 
+        document.getElementById("login-create").addEventListener("click", playClick);
+        document.getElementById("re-login-btn").addEventListener("click", playClick);
+
+        // Time Display
+        const timeDisplay = document.getElementById("current-time");
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+            timeDisplay.textContent = timeString;
+        }
+        setInterval(updateTime, 1000);
+        updateTime(); // Initial call
+
+        // --- PARTICLE SYSTEM ---
+        const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d"); 
+        function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+        resize();
+        window.onresize=resize; 
+
+        let particles=[],mode="stars"; 
+        for(let i=0;i<150;i++){
+            particles.push({
+                x:Math.random()*canvas.width,
+                y:Math.random()*canvas.height,
+                size:1 + Math.random()*2,
+                speedX:(Math.random()-.5)*0.3,
+                speedY:(Math.random()-.5)*0.3,
+                angle:Math.random()*360
+            });
+        } 
+
+        function drawParticles(){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            if(mode === "off") {
+                requestAnimationFrame(drawParticles);
+                return;
+            }
+            
+            particles.forEach(p=>{
+                if(mode==="stars"){
+                    ctx.fillStyle="rgba(255,255,255,0.8)";
+                    ctx.beginPath();
+                    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+                    ctx.fill();
+                }
+                if(mode==="bubbles"){
+                    ctx.strokeStyle="rgba(255,255,255,.5)";
+                    ctx.beginPath();
+                    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+                    ctx.stroke();
+                    p.y-=0.3; 
+                }
+                if(mode==="triangles"){
+                    ctx.fillStyle="rgba(255,255,255,.7)";
+                    ctx.save();
+                    ctx.translate(p.x,p.y);
+                    ctx.rotate(p.angle);
+                    ctx.beginPath();
+                    ctx.moveTo(0,-p.size);
+                    ctx.lineTo(p.size,p.size);
+                    ctx.lineTo(-p.size,p.size);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.restore();
+                    p.angle+=0.01;
+                }
+
+                p.x+=p.speedX;
+                p.y+=p.speedY;
+                
+                if(p.x<0)p.x=canvas.width;
+                if(p.x>canvas.width)p.x=0;
+                if(p.y<0)p.y=canvas.height;
+                if(p.y>canvas.height)p.y=0;
+            });
+            requestAnimationFrame(drawParticles);
+        } 
+        drawParticles(); 
+
+        // --- WALLPAPER FUNCTIONS ---
+        const wallpaperPanel = document.getElementById("wallpaper-panel");
+        const quickWallpaperBtn = document.getElementById("quick-wallpaper-btn");
+        const wallpaperUrlInput = document.getElementById("wallpaper-url-input");
+        const wallpaperFileInput = document.getElementById("wallpaper-file-input");
+        const wallpaperApplyBtn = document.getElementById("wallpaper-apply");
+        const wallpaperResetBtn = document.getElementById("wallpaper-reset");
+        
+        function applyWallpaper(source) {
+            document.body.style.setProperty('--wallpaper', `url('${source}')`);
+            localStorage.setItem('wallpaperSource', source);
+            // Hide particle canvas if an image is set
+            document.getElementById('particles').style.display = source ? 'none' : 'block';
+        }
+        
+        function resetWallpaper() {
+            document.body.style.setProperty('--wallpaper', 'var(--bg)');
+            localStorage.removeItem('wallpaperSource');
+            document.getElementById('particles').style.display = 'block';
+        }
+
+        wallpaperApplyBtn.addEventListener('click', () => {
+            if (wallpaperUrlInput.value) {
+                applyWallpaper(wallpaperUrlInput.value);
+            }
+            wallpaperPanel.classList.remove('active');
+        });
+
+        wallpaperResetBtn.addEventListener('click', () => {
+            resetWallpaper();
+            wallpaperPanel.classList.remove('active');
+        });
+
+        wallpaperFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    applyWallpaper(event.target.result);
+                    wallpaperPanel.classList.remove('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Load wallpaper from storage
+        const savedWallpaper = localStorage.getItem('wallpaperSource');
+        if (savedWallpaper) {
+            applyWallpaper(savedWallpaper);
+        } else {
+            document.getElementById('particles').style.display = 'block';
+        }
+
+        // --- SETTINGS (Theme/Panic) ---
+        const settingsPanel = document.getElementById("settings-panel");
+        const settingsSaveBtn = document.getElementById("settings-save");
+        const themePicker = document.getElementById("theme-picker");
+        const particleSelect = document.getElementById("particle-select");
+        const hotkeyInput = document.getElementById("hotkey-input");
+        const hotkeyDestination = document.getElementById("hotkey-destination");
+        const customUrlContainer = document.getElementById("custom-url-container");
+        const customUrlInput = document.getElementById("custom-url-input");
+
+        hotkeyDestination.addEventListener('change', () => {
+            customUrlContainer.style.display = hotkeyDestination.value === 'custom' ? 'flex' : 'none';
+        });
+
+        function loadSettings() {
+            // Load Theme
+            const savedTheme = localStorage.getItem('themeColor') || '#ff4757';
+            document.documentElement.style.setProperty('--accent', savedTheme);
+            themePicker.value = savedTheme;
+
+            // Load Particles
+            const savedParticles = localStorage.getItem('particleMode') || 'stars';
+            mode = savedParticles;
+            particleSelect.value = savedParticles;
+
+            // Load Panic Hotkey
+            const savedKey = localStorage.getItem('panicKey') || '`';
+            hotkeyInput.value = savedKey;
+
+            // Load Panic Destination
+            const savedDest = localStorage.getItem('panicDestination') || 'https://www.google.com/';
+            
+            if (['https://www.google.com/', 'https://www.wikipedia.org/'].includes(savedDest)) {
+                hotkeyDestination.value = savedDest;
+                customUrlContainer.style.display = 'none';
+            } else {
+                hotkeyDestination.value = 'custom';
+                customUrlInput.value = savedDest;
+                customUrlContainer.style.display = 'flex';
+            }
+        }
+
+        function saveSettings() {
+            localStorage.setItem('themeColor', themePicker.value);
+            document.documentElement.style.setProperty('--accent', themePicker.value);
+
+            localStorage.setItem('particleMode', particleSelect.value);
+            mode = particleSelect.value;
+            
+            const key = hotkeyInput.value.trim().toUpperCase().slice(0, 1) || '`';
+            localStorage.setItem('panicKey', key);
+
+            let destination = hotkeyDestination.value;
+            if (destination === 'custom') {
+                // If the user selects custom and types "about:blank" here, it works as a cloak!
+                destination = customUrlInput.value.trim() || 'about:blank'; 
+            }
+            localStorage.setItem('panicDestination', destination);
+            
+            settingsPanel.classList.remove('active');
+        }
+
+        settingsSaveBtn.addEventListener('click', saveSettings);
+        loadSettings();
+
+
+        // --- PANIC HOTKEY LISTENER ---
+        document.addEventListener('keydown', (e) => {
+            const panicKey = localStorage.getItem('panicKey');
+            const panicDest = localStorage.getItem('panicDestination');
+            
+            if (e.key.toUpperCase() === panicKey) {
+                e.preventDefault();
+                // Use location.replace to ensure the destination replaces the current history entry
+                window.location.replace(panicDest); 
+            }
+        });
+
+
+        // --- GAME DATA (USING YOUR EXACT FORMAT: title, path, img) ---
+        const games = [
+            { title: "Tag", path: "games/Tag.html", img: "img/tag.png" }, 
+            { title: "eaglercraft", path: "games/eaglercraft.html", img: "img/eaglercraft.png" }, 
+            { title: "bad parenting", path: "games/badparenting/", img: "img/badparenting.png" }, 
+            { title: "bunny ada", path: "games/bunny-ada/", img: "img/bunnyada.gif" }, 
+            { title: "Get Yoked", path: "games/getyoked.html", img: "img/getyoked.png" }, 
+            { title: "PixelClient", path: "games/PixelClient.html", img: "img/getyoked.png" }, 
+            { title: "Walters Lab", path: "games/Walterlab.html", img: "img/walterlab.png" }, 
+            { title: "Tag 2", path: "games/Tag2.html", img: "img/tag2.png" }, 
+            { title: "New Game 2", path: "games/newgame2/index.html", img: "img/newgame2.png" }
+        ];
+
+        // RENAME GAME KEYS TO MATCH YOUR FORMAT
+        // The game rendering function must be updated to use `path` for the URL and `img` for the image.
+        
+        const gamesGrid = document.getElementById("games-grid");
+        const gameSearch = document.getElementById("game-search");
+
+        function renderGames(filter = '') {
+            gamesGrid.innerHTML = '';
+            const filteredGames = games.filter(game => 
+                game.title.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            filteredGames.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.className = 'game';
+                // USE 'path' AND 'img'
+                gameElement.setAttribute('data-url', game.path);
+                gameElement.setAttribute('data-title', game.title);
+                gameElement.innerHTML = `
+                    <img src="${game.img}" alt="${game.title}">
+                    <div class="game-title">${game.title}</div>
+                `;
+                gameElement.addEventListener('click', () => openGameViewer(game.path, game.title));
+                gamesGrid.appendChild(gameElement);
+            });
+            // Show the grid after loading
+            setTimeout(() => {
+                gamesGrid.classList.add('show');
+            }, 100);
+        }
+
+        gameSearch.addEventListener('input', (e) => {
+            renderGames(e.target.value);
+        });
+
+        // --- GAME VIEWER LOGIC ---
+        const gameViewer = document.getElementById('game-viewer');
+        const viewerTitle = document.getElementById('viewer-title');
+        const viewerFrame = document.getElementById('viewer-frame');
+        const viewerPlaceholder = document.querySelector('.viewer-placeholder');
+        const viewerCloseBtn = document.getElementById('viewer-close');
+        const viewerPlayBtn = document.getElementById('viewer-play');
+        const viewerNewTabBtn = document.getElementById('viewer-newtab');
+        const viewerNewTabBlankBtn = document.getElementById('viewer-newtab-blank');
+
+
+        function openGameViewer(url, title) {
+            viewerTitle.textContent = title;
+            gameViewer.setAttribute('data-src', url);
+            viewerFrame.src = ''; // Clear iframe src
+            viewerFrame.classList.remove('active'); // Hide frame
+            viewerPlaceholder.style.display = 'flex'; // Show placeholder
+            gameViewer.style.display = 'flex';
+            
+            // Allow CSS transition to take effect
+            setTimeout(() => gameViewer.classList.add('active'), 10);
+        }
+
+        viewerCloseBtn.addEventListener('click', () => {
+            gameViewer.classList.remove('active');
+            setTimeout(() => {
+                gameViewer.style.display = 'none';
+                viewerFrame.src = ''; // Stop the game when closed
+            }, 300);
+        });
+
+        viewerPlayBtn.addEventListener('click', () => {
+            const url = gameViewer.getAttribute('data-src');
+            viewerFrame.src = url;
+            viewerPlaceholder.style.display = 'none';
+            viewerFrame.style.display = 'block';
+            setTimeout(() => viewerFrame.classList.add('active'), 10);
+        });
+
+        viewerNewTabBtn.addEventListener('click', () => {
+            const url = gameViewer.getAttribute('data-src');
+            window.open(url, '_blank');
+            viewerCloseBtn.click(); // Close the viewer after launch
+        });
+
+        // --- THE CRUCIAL ABOUT:BLANK CLOAKING FUNCTION ---
+        viewerNewTabBlankBtn.addEventListener('click', () => {
+            const url = gameViewer.getAttribute('data-src');
+            
+            // 1. Open a new window and force it to about:blank immediately
+            const blankWindow = window.open('about:blank', '_blank');
+            
+            if (blankWindow) {
+                // 2. Write the game's iframe into the document of the blank window
+                // This keeps the URL bar as 'about:blank' but displays the game content
+                blankWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>${viewerTitle.textContent}</title>
+                        <style>
+                            body { margin: 0; padding: 0; overflow: hidden; background-color: #000; }
+                            iframe { width: 100vw; height: 100vh; border: none; }
+                        </style>
+                    </head>
+                    <body>
+                        <iframe src="${url}" allowfullscreen></iframe>
+                    </body>
+                    </html>
+                `);
+                blankWindow.document.close();
+            } else {
+                // Fallback if pop-up blocker prevents opening
+                alert("Please disable your pop-up blocker to use the stealth launch feature.");
+            }
+
+            viewerCloseBtn.click(); // Close the viewer after launch
+        });
+
+
+        // --- ACCOUNT LOGIC (Simplified) ---
+        const loginOverlay = document.getElementById('login-overlay');
+        const reLoginOverlay = document.getElementById('re-login-overlay');
+        const loginCreateBtn = document.getElementById('login-create');
+        const reLoginBtn = document.getElementById('re-login-btn');
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const rePasswordInput = document.getElementById('re-password-input');
+        const initialProfilePicInput = document.getElementById('initial-profile-pic-input');
+        const initialPicText = document.getElementById('initial-pic-text');
+        const headerUsername = document.getElementById('header-username');
+        const accountPanel = document.getElementById('account-panel');
+        const profilePicElement = document.getElementById('profile-pic');
+        const headerProfilePicElement = document.getElementById('header-profile-pic');
+        const logoutBtn = document.getElementById('logout-btn');
+        const accountBtn = document.getElementById('account-btn');
+        const settingsBtn = document.getElementById('settings-btn');
+        const userDisplay = document.getElementById('user-display');
+        const profilePicUploader = document.getElementById('profile-pic-input');
+        const profileSelector = document.getElementById('profile-selector');
+        
+        let loggedIn = false;
+        let profilePicData = 'images2/acc.png'; 
+
+        // Initial check on load
+        function checkLoginStatus() {
+            const storedUser = localStorage.getItem('username');
+            const storedPass = localStorage.getItem('password');
+            const storedPic = localStorage.getItem('profilePicData');
+
+            if (storedUser && storedPass) {
+                loggedIn = true;
+                reLoginOverlay.querySelector('#welcome-back-msg').textContent = `Welcome back, ${storedUser}!`;
+                document.getElementById('display-name').textContent = storedUser;
+                document.getElementById('display-username').textContent = `@${storedUser.toLowerCase().replace(/\s/g, '')}`;
+                
+                if (storedPic) {
+                    profilePicData = storedPic;
+                    profilePicElement.src = storedPic;
+                    headerProfilePicElement.src = storedPic;
+                }
+                
+                loginOverlay.classList.add('hidden');
+                reLoginOverlay.classList.remove('hidden');
+                renderGames();
+            } else {
+                // First time user
+                loginOverlay.classList.remove('hidden');
+            }
+        }
+
+        // --- Utility to update all profile pics ---
+        function updateProfilePics(src) {
+            profilePicData = src;
+            localStorage.setItem('profilePicData', src);
+            profilePicElement.src = src;
+            headerProfilePicElement.src = src;
+        }
+
+        // Initial Profile Pic Upload Preview
+        initialProfilePicInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                initialPicText.textContent = `✅ ${file.name}`;
+            }
+        });
+
+        // Account Creation
+        loginCreateBtn.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            
+            if (username.length < 3 || password.length < 4) {
+                alert("Username must be at least 3 characters and password 4 characters.");
+                return;
+            }
+
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password); 
+            
+            // Handle initial profile picture upload
+            const file = initialProfilePicInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    updateProfilePics(event.target.result);
+                    finalizeLogin(username);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Use default image if no file is uploaded
+                updateProfilePics('images2/acc.png');
+                finalizeLogin(username);
+            }
+        });
+
+        // Finalize Login function
+        function finalizeLogin(username) {
+            loggedIn = true;
+            headerUsername.textContent = username;
+            userDisplay.style.display = 'flex';
+            loginOverlay.classList.add('hidden');
+            reLoginOverlay.classList.add('hidden');
+            document.title = "HoHo Games"; 
+            renderGames();
+        }
+
+        // Re-Login
+        reLoginBtn.addEventListener('click', () => {
+            const password = rePasswordInput.value;
+            const storedPass = localStorage.getItem('password');
+            const storedUser = localStorage.getItem('username');
+
+            if (password === storedPass) {
+                finalizeLogin(storedUser);
+            } else {
+                alert("Incorrect password.");
+            }
+        });
+
+        // Forgot Password / Reset Account
+        document.getElementById('forgot-password-link').addEventListener('click', () => {
+            if (confirm("Are you sure you want to reset your account? This will erase your username, password, and profile picture.")) {
+                localStorage.clear();
+                window.location.reload(); 
+            }
+        });
+
+        // Account Hub Profile Pic Upload
+        profilePicUploader.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    updateProfilePics(event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Account Hub Profile Selector
+        profileSelector.querySelectorAll('.profile-option img').forEach(img => {
+            img.addEventListener('click', (e) => {
+                updateProfilePics(e.target.getAttribute('data-src'));
+            });
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            loggedIn = false;
+            localStorage.removeItem('username');
+            localStorage.removeItem('password');
+            localStorage.removeItem('profilePicData');
+            window.location.reload(); 
+        });
+
+        // Panel Toggle Buttons
+        settingsBtn.addEventListener('click', () => {
+            settingsPanel.classList.toggle('active');
+            accountPanel.classList.remove('active');
+            wallpaperPanel.classList.remove('active');
+        });
+
+        accountBtn.addEventListener('click', () => {
+            accountPanel.classList.toggle('active');
+            settingsPanel.classList.remove('active');
+            wallpaperPanel.classList.remove('active');
+        });
+        
+        quickWallpaperBtn.addEventListener('click', () => {
+            wallpaperPanel.classList.toggle('active');
+            settingsPanel.classList.remove('active');
+            accountPanel.classList.remove('active');
+        });
+
+        // Hide panels when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!settingsPanel.contains(e.target) && e.target !== settingsBtn && settingsPanel.classList.contains('active')) {
+                settingsPanel.classList.remove('active');
+            }
+            if (!accountPanel.contains(e.target) && e.target !== accountBtn && accountPanel.classList.contains('active')) {
+                accountPanel.classList.remove('active');
+            }
+            if (!wallpaperPanel.contains(e.target) && e.target !== quickWallpaperBtn && wallpaperPanel.classList.contains('active')) {
+                wallpaperPanel.classList.remove('active');
+            }
+        });
+
+        // Run the initial check
+        checkLoginStatus();
+
+    </script>
 </body>
 </html>
