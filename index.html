@@ -1,1341 +1,400 @@
-\<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HoHo Games - Unblocked Games</title>
-    <meta name="description" content="HoHo Games - Play unblocked games">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="images2/acc.png" type="image/x-icon">
-    <style>
-        /* VARIABLES */
-        :root {
-            --bg: #1e1e1e;
-            --accent: #ff4757; /* Default HoHo Red */
-            --light-bg: #2d2d2d;
-            --text-color: #ffffff;
-            --panel-bg: rgba(45, 45, 45, 0.95);
-            --border-radius: 12px;
-            --shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            --transition-time: 0.3s;
-            --wallpaper: var(--bg); /* Used for background color when no image is set */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HoHo Games | Ultimate Hub</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        /* GENERAL STYLES */
-        body {
-            background: var(--wallpaper);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            transition: background-image 0.5s, background-color 0.5s;
-        }
+<style>
+:root {
+    --bg:#050505;
+    --accent:#1e8b03;
+    --accent-glow:rgba(255, 255, 255, 0.5);
+    --card-bg:#111;
+    --curve:cubic-bezier(.4,0,.2,1);
+}
 
-        #particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{background:var(--bg);color:white;min-height:100vh;overflow:hidden}
 
-        /* --- HEADER & CONTROLS --- */
-        header {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            margin-bottom: 30px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
+/* HUB */
+#main-hub{
+    padding:20px;
+    transition:.6s var(--curve);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    height:100vh;
+    overflow-y:auto;
+}
+.hub-exit{
+    opacity:0;
+    transform:translateY(50px) scale(.9);
+    filter:blur(15px);
+    pointer-events:none;
+}
 
-        #logo {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-shadow: 0 0 5px rgba(255, 71, 87, 0.5);
-            letter-spacing: 1px;
-            transition: transform 0.2s;
-        }
-        
-        #logo:hover {
-            transform: scale(1.05);
-        }
+header{
+    width:100%;
+    max-width:1100px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:25px 0;
+}
 
-        #controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+.hub-btn{
+    width:60px;
+    height:60px;
+    background:var(--card-bg);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    position:relative;
+    border:1px solid rgba(255,255,255,.1);
+    transition:.4s cubic-bezier(.175,.885,.32,1.275);
+    overflow:hidden;
+}
+.hub-btn::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:var(--accent);
+    transform:scale(0);
+    border-radius:50%;
+    transition:.4s;
+}
+.hub-btn i{z-index:2}
+.hub-btn:hover{
+    transform:scale(1.15);
+    border-color:var(--accent);
+    box-shadow:0 0 20px var(--accent-glow);
+}
+.hub-btn:hover::after{transform:scale(1)}
 
-        #controls button {
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: background-color 0.2s, color 0.2s, transform 0.2s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
+/* GRID */
+#games-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:25px;
+    width:100%;
+    max-width:1100px;
+    margin-top:30px;
+}
+.game-card{
+    background:var(--card-bg);
+    border-radius:25px;
+    overflow:hidden;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,.05);
+    transition:.4s var(--curve);
+}
+.game-card:hover{
+    transform:translateY(-10px);
+    border-color:var(--accent);
+}
+.img-box{height:140px}
+.game-card img{width:100%;height:100%;object-fit:cover}
 
-        #controls button:hover {
-            background-color: var(--accent);
-            transform: scale(1.1);
-        }
+/* MODALS */
+.modal{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(.8);
+    width:90%;
+    max-width:420px;
+    background:#0a0a0a;
+    padding:35px;
+    border-radius:30px;
+    border:2px solid var(--accent);
+    z-index:3000;
+    display:none;
+    opacity:0;
+    transition:.4s var(--curve);
+}
+.modal.active{
+    display:block;
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+}
 
-        #user-display {
-            display: none; /* Hidden until login */
-            align-items: center;
-            gap: 10px;
-            padding: 5px 10px;
-            background-color: var(--light-bg);
-            border-radius: var(--border-radius);
-            font-size: 0.9rem;
-        }
-        
-        #header-profile-pic {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        #header-username {
-            font-weight: 600;
-        }
-        
-        #current-time {
-            font-size: 1rem;
-            font-weight: 400;
-            opacity: 0.8;
-            padding: 5px 10px;
-            background-color: var(--light-bg);
-            border-radius: var(--border-radius);
-        }
+select,input{
+    width:100%;
+    padding:15px;
+    margin:10px 0;
+    background:#151515;
+    border:1px solid #333;
+    color:white;
+    border-radius:12px;
+}
 
+/* ACTION BUTTONS — RESTORED ANIMATIONS */
+.btn-action{
+    padding:12px 20px;
+    border-radius:12px;
+    border:none;
+    font-weight:800;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    justify-content:center;
+    transition:.35s cubic-bezier(.175,.885,.32,1.275);
+}
+.btn-action::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:rgba(255,255,255,.12);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:.35s;
+}
+.btn-action:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 18px var(--accent-glow);
+}
+.btn-action:hover::after{transform:scaleX(1)}
 
-        /* --- SEARCH BAR --- */
-        #search-container {
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 40px;
-            position: relative;
-        }
+.b-accent{background:var(--accent);color:white}
 
-        #game-search {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid var(--accent);
-            border-radius: var(--border-radius);
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            font-size: 1.1rem;
-            outline: none;
-            transition: box-shadow 0.3s;
-        }
+/* LAUNCHER */
+#pre-launcher{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.98);
+    z-index:4000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+}
+#pre-launcher.active{display:flex}
 
-        #game-search:focus {
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
-        }
-        
-        #search-icon {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--accent);
-            font-size: 1.2rem;
-            pointer-events: none;
-        }
+.launcher-ui{
+    text-align:center;
+    transform:scale(.7);
+    transition:.6s var(--curve);
+}
+#pre-launcher.active .launcher-ui{transform:scale(1)}
 
-        /* --- GAMES GRID --- */
-        #games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px 0;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-        }
+.controller-icon{
+    font-size:7rem;
+    color:var(--accent);
+    filter:drop-shadow(0 0 15px var(--accent-glow));
+    animation:pulse 2s infinite;
+}
 
-        #games-grid.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* CLEAN X */
+.close-x{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:#111;
+    color:var(--accent);
+    font-size:1.6rem;
+    font-weight:900;
+    border:2px solid var(--accent);
+}
+.close-x:hover{
+    background:var(--accent);
+    color:#000;
+}
 
-        .game {
-            background-color: var(--light-bg);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            text-decoration: none;
-            color: var(--text-color);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-        }
+/* GAME VIEW */
+#game-view{
+    position:fixed;
+    inset:0;
+    background:#000;
+    z-index:5000;
+    display:none;
+    flex-direction:column;
+    opacity:0;
+    transform:scale(1.1);
+    filter:blur(10px);
+    transition:.7s var(--curve);
+}
+#game-view.active{
+    display:flex;
+    opacity:1;
+    transform:scale(1);
+    filter:blur(0);
+}
+.view-bar{
+    padding:15px 30px;
+    background:#050505;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid var(--accent);
+}
+iframe{flex:1;border:none;width:100%;height:100%}
 
-        .game:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow);
-        }
-
-        .game img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-bottom: 2px solid var(--accent);
-        }
-
-        .game-title {
-            padding: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* --- MODAL PANELS (Settings, Account, Wallpaper) --- */
-        .modal-panel {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            width: 90%;
-            max-width: 450px;
-            background-color: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 25px;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity var(--transition-time), visibility var(--transition-time), transform var(--transition-time);
-            border: 1px solid var(--accent);
-        }
-
-        .modal-panel.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .modal-panel h2 {
-            color: var(--accent);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 5px;
-        }
-
-        .panel-row {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .panel-row label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .panel-row input[type="text"],
-        .panel-row input[type="url"],
-        .panel-row select,
-        .panel-row input[type="color"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--light-bg);
-            border-radius: 8px;
-            background-color: #1e1e1e;
-            color: var(--text-color);
-            outline: none;
-        }
-        
-        .panel-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-        }
-
-        .panel-actions button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.2s, opacity 0.2s;
-        }
-        
-        #settings-save, #wallpaper-apply {
-            background-color: var(--accent);
-            color: var(--text-color);
-        }
-        
-        #settings-save:hover, #wallpaper-apply:hover {
-            opacity: 0.9;
-        }
-
-        /* --- ACCOUNT PANEL SPECIFIC --- */
-        #account-panel .profile-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        
-        #account-panel .profile-info img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent);
-        }
-
-        #account-panel .profile-details {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        #display-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        
-        #display-username {
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        
-        #profile-pic-uploader {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        #profile-pic-uploader input[type="file"] {
-            display: none;
-        }
-        
-        #profile-pic-uploader label {
-            background-color: var(--accent);
-            color: var(--text-color);
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: opacity 0.2s;
-        }
-        
-        #profile-pic-uploader label:hover {
-            opacity: 0.9;
-        }
-
-        #profile-selector {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed var(--light-bg);
-        }
-        
-        .profile-option img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: border-color 0.2s, transform 0.2s;
-        }
-        
-        .profile-option img:hover {
-            border-color: var(--accent);
-            transform: scale(1.1);
-        }
-        
-        #logout-btn {
-            background-color: #d63031;
-            color: var(--text-color);
-        }
-
-        /* --- GAME VIEWER MODAL --- */
-        #game-viewer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 2000;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        #game-viewer.active {
-            opacity: 1;
-        }
-
-        #viewer-header {
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--accent);
-        }
-
-        #viewer-header h2 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: var(--text-color);
-        }
-        
-        #viewer-controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        #viewer-controls button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        #viewer-play {
-            background-color: #2ecc71;
-        }
-        
-        #viewer-newtab {
-            background-color: #3498db;
-        }
-        
-        #viewer-newtab-blank { 
-            background-color: #9b59b6; 
-        }
-
-        #viewer-close {
-            background-color: #e74c3c;
-        }
-
-        #viewer-frame {
-            width: 100%;
-            max-width: 900px;
-            height: calc(100vh - 100px);
-            border: 2px solid var(--accent);
-            border-radius: var(--border-radius);
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-        
-        #viewer-frame.active {
-            opacity: 1;
-        }
-        
-        .viewer-placeholder {
-            width: 100%;
-            max-width: 900px;
-            height: calc(100vh - 100px);
-            background-color: var(--light-bg);
-            border-radius: var(--border-radius);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .viewer-placeholder p {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            opacity: 0.8;
-        }
-        
-        /* --- LOGIN OVERLAYS --- */
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 3000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.3s;
-        }
-        
-        .login-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .login-card {
-            background-color: var(--panel-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 40px;
-            width: 90%;
-            max-width: 380px;
-            text-align: center;
-            border: 2px solid var(--accent);
-        }
-
-        .login-card h2 {
-            color: var(--accent);
-            margin-bottom: 25px;
-            font-size: 2rem;
-        }
-        
-        .login-card p {
-            margin-bottom: 20px;
-        }
-        
-        .login-card input[type="text"],
-        .login-card input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            background-color: #1e1e1e;
-            color: var(--text-color);
-            font-size: 1rem;
-            outline: none;
-        }
-        
-        .file-upload-box {
-            background-color: var(--light-bg);
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: background-color 0.2s;
-        }
-        
-        .file-upload-box:hover {
-            background-color: #3a3a3a;
-        }
-        
-        .file-upload-box label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-color);
-            cursor: pointer;
-        }
-        
-        .file-upload-box input[type="file"] {
-            display: none;
-        }
-
-
-        .login-button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--accent);
-            color: var(--text-color);
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        
-        .login-button:hover {
-            opacity: 0.9;
-        }
-        
-        #re-login-overlay .login-button {
-            margin-bottom: 15px;
-        }
-        
-        #forgot-password-link {
-            color: var(--accent);
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 20px;
-            }
-            #controls {
-                justify-content: center;
-                width: 100%;
-            }
-            #games-grid {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+@keyframes pulse{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.1)}
+}
+</style>
 </head>
+
 <body>
-    <audio id="click-sound" src="sounds/click.mp3" preload="auto"></audio>
 
-    <canvas id="particles"></canvas>
-
-    <header>
-        <a href="#" id="logo">HoHo Games</a>
-        <div id="controls">
-            <div id="current-time">00:00:00 AM</div>
-            <div id="user-display" style="display: none;">
-                <img id="header-profile-pic" src="images2/acc.png" alt="Profile Picture">
-                <span id="header-username">User</span>
-            </div>
-            <button id="quick-wallpaper-btn" title="Wallpaper Settings"><i class="fas fa-image"></i></button>
-            <button id="settings-btn" title="Settings"><i class="fas fa-cog"></i></button>
-            <button id="account-btn" title="Account Hub"><i class="fas fa-user-circle"></i></button>
-        </div>
-    </header>
-
-    <div id="search-container">
-        <input type="text" id="game-search" placeholder="Search games...">
-        <i class="fas fa-search" id="search-icon"></i>
+<div id="main-hub">
+<header>
+    <div style="font-size:2.5rem;font-weight:900;color:var(--accent)">HOHO</div>
+    <div style="display:flex;gap:15px">
+        <div class="hub-btn" onclick="openModal('acc-modal')"><i class="fas fa-user"></i></div>
+        <div class="hub-btn" onclick="openModal('set-modal')"><i class="fas fa-cog"></i></div>
+        <div class="hub-btn" onclick="location.reload()"><i class="fas fa-sync-alt"></i></div>
     </div>
+</header>
 
-    <main id="games-grid">
-        </main>
-    
-    <div id="settings-panel" class="modal-panel">
-        <h2><i class="fas fa-cog"></i> Settings</h2>
-        
-        <div class="panel-row">
-            <label for="theme-picker">Theme Color (Accent)</label>
-            <input type="color" id="theme-picker" value="#ff4757">
-        </div>
-        
-        <div class="panel-row">
-            <label for="particle-select">Background Particles</label>
-            <select id="particle-select">
-                <option value="stars">Stars (Default)</option>
-                <option value="bubbles">Bubbles</option>
-                <option value="triangles">Triangles</option>
-                <option value="off">Off</option>
-            </select>
-        </div>
-        
-        <div class="panel-row">
-            <label for="hotkey-input">Panic Hotkey (Key)</label>
-            <input type="text" id="hotkey-input" placeholder="e.g., Q or 1" maxlength="1">
-        </div>
-        
-        <div class="panel-row">
-            <label for="hotkey-destination">Panic Destination</label>
-            <select id="hotkey-destination">
-                <option value="https://www.google.com/">Google</option>
-                <option value="https://www.wikipedia.org/">Wikipedia</option>
-                <option value="custom">Custom URL (Use 'about:blank' here to clear the current page)</option>
-            </select>
-        </div>
-        
-        <div class="panel-row" id="custom-url-container" style="display:none;">
-            <input type="url" id="custom-url-input" placeholder="https://example.com or about:blank">
-        </div>
+<input id="search" placeholder="Search library..." oninput="doSearch()" style="max-width:600px;width:100%;padding:15px">
 
-        <div class="panel-actions">
-            <button id="settings-save">Save Settings</button>
-        </div>
+<main id="games-grid"></main>
+</div>
+
+<!-- SETTINGS -->
+<div id="set-modal" class="modal">
+<h2 style="color:var(--accent)">Settings</h2>
+<label>Panic Redirect (`)</label>
+<select id="panic-url">
+    <option value="https://classroom.google.com">Google Classroom</option>
+    <option value="https://www.google.com">Google</option>
+</select>
+<label>Tab Cloaking</label>
+<select id="cloak-picker" onchange="setTab()">
+    <option value="default">Default</option>
+    <option value="classroom">Classes</option>
+    <option value="drive">My Drive</option>
+</select>
+<button class="btn-action b-accent" style="width:100%" onclick="closeModal()">Save</button>
+</div>
+
+<!-- ACCOUNT -->
+<div id="acc-modal" class="modal">
+<h2 style="color:var(--accent)">Profile</h2>
+<input id="user-name" placeholder="Nickname">
+<button class="btn-action b-accent" style="width:100%" onclick="closeModal()">Update</button>
+</div>
+
+<!-- LAUNCHER -->
+<div id="pre-launcher">
+<div class="launcher-ui">
+    <i class="fas fa-gamepad controller-icon"></i>
+    <h1 id="l-name"></h1>
+    <p style="opacity:.6">Ready to play?</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-action b-accent" onclick="startSmooth()"><i class="fas fa-play"></i> PLAY</button>
+        <button class="btn-action" style="background:#2ecc71;color:white" onclick="launchTab()">NEW TAB</button>
+        <button class="btn-action" style="background:#6c5ce7;color:white" onclick="stealthMode()">STEALTH</button>
+        <button class="btn-action close-x" onclick="cancelLaunch()">X</button>
     </div>
-    
-    <div id="wallpaper-panel" class="modal-panel">
-        <h2><i class="fas fa-image"></i> Wallpaper</h2>
-        
-        <div class="panel-row">
-            <label>Upload Image File</label>
-            <input type="file" id="wallpaper-file-input" accept="image/*">
-        </div>
-        
-        <div class="panel-row">
-            <label>Image URL</label>
-            <input type="url" id="wallpaper-url-input" placeholder="Paste image address">
-        </div>
+</div>
+</div>
 
-        <div class="panel-actions">
-            <button id="wallpaper-reset">Reset</button>
-            <button id="wallpaper-apply">Apply Wallpaper</button>
-        </div>
-    </div>
+<!-- GAME VIEW -->
+<div id="game-view">
+<div class="view-bar">
+    <h3 id="vp-title">HoHo Engine</h3>
+    <button class="btn-action" style="background:#e74c3c;color:white" onclick="exitGame()">EXIT</button>
+</div>
+<iframe id="game-frame"></iframe>
+</div>
 
-    <div id="account-panel" class="modal-panel">
-        <h2><i class="fas fa-user-circle"></i> Account Hub</h2>
-        
-        <div class="profile-info">
-            <img id="profile-pic" src="images2/acc.png" alt="Profile Picture">
-            <div class="profile-details">
-                <span id="display-name">Username</span>
-                <span id="display-username">@username</span>
-            </div>
-        </div>
-        
-        <div class="panel-row">
-            <label>Change Profile Picture (Upload)</label>
-            <div id="profile-pic-uploader">
-                <input type="file" id="profile-pic-input" accept="image/*">
-                <label for="profile-pic-input">Select Image</label>
-            </div>
-        </div>
-        
-        <div class="panel-row">
-            <label>Quick Select Profile</label>
-            <div id="profile-selector">
-                <div class="profile-option"><img src="images2/acc.png" data-src="images2/acc.png" alt="Default"></div>
-                <div class="profile-option"><img src="images2/acc-cat.png" data-src="images2/acc-cat.png" alt="Cat"></div>
-                <div class="profile-option"><img src="images2/acc-gamer.png" data-src="images2/acc-gamer.png" alt="Gamer"></div>
-                <div class="profile-option"><img src="images2/acc-astro.png" data-src="images2/acc-astro.png" alt="Astro"></div>
-            </div>
-        </div>
-        
-        <div class="panel-actions" style="border-top: 1px dashed var(--light-bg); padding-top: 20px;">
-            <button id="change-password-btn" style="background-color: #3498db; color: var(--text-color);">Change Password</button>
-            <button id="logout-btn">Log Out</button>
-        </div>
-    </div>
+<script>
+const games = [
+    { title:"Tag", path:"games/Tag.html", img:"img/tag.png" },
+    { title:"eaglercraft", path:"games/eaglercraft.html", img:"img/eaglercraft.png" },
+    { title:"bad parenting", path:"games/badparenting/", img:"img/badparenting.png" },
+    { title:"bunny ada", path:"games/bunny-ada/", img:"img/bunnyada.gif" },
+    { title:"Get Yoked", path:"games/getyoked.html", img:"img/getyoked.png" },
+    { title:"PixelClient", path:"games/PixelClient.html", img:"img/getyoked.png" },
+    { title:"Walters Lab", path:"games/Walterlab.html", img:"img/walterlab.png" },
+    { title:"Tag 2", path:"games/Tag2.html", img:"img/tag2.png" },
+    { title:"New Game 2", path:"games/newgame2/index.html", img:"img/newgame2.png" }
+];
 
+let selected=null;
 
-    <div id="game-viewer" data-src="">
-        <div id="viewer-header">
-            <h2 id="viewer-title">Game Title</h2>
-            <div id="viewer-controls">
-                <button id="viewer-play"><i class="fas fa-play"></i> Play</button>
-                <button id="viewer-newtab"><i class="fas fa-external-link-alt"></i> New Tab (Normal)</button>
-                <button id="viewer-newtab-blank"><i class="fas fa-mask"></i> New Tab Blank (Stealth)</button> 
-                <button id="viewer-close"><i class="fas fa-times"></i> Close</button>
-            </div>
-        </div>
-        <div class="viewer-placeholder">
-            <i class="fas fa-gamepad" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
-            <p>Click 'Play' to launch the game!</p>
-        </div>
-        <iframe id="viewer-frame" frameborder="0" allowfullscreen></iframe>
-    </div>
+function render(data){
+    const grid=document.getElementById("games-grid");
+    grid.innerHTML="";
+    data.forEach(g=>{
+        const card=document.createElement("div");
+        card.className="game-card";
+        card.innerHTML=`<div class="img-box"><img src="${g.img}" onerror="this.src='https://via.placeholder.com/300/000/ff4757?text=HoHo'"></div><div style="padding:15px;text-align:center">${g.title}</div>`;
+        card.onclick=()=>{
+            selected=g;
+            document.getElementById("l-name").innerText=g.title;
+            document.getElementById("main-hub").classList.add("hub-exit");
+            setTimeout(()=>document.getElementById("pre-launcher").classList.add("active"),300);
+        };
+        grid.appendChild(card);
+    });
+}
 
+function startSmooth(){
+    if(!selected)return;
+    document.getElementById("pre-launcher").classList.remove("active");
+    const view=document.getElementById("game-view");
+    document.getElementById("game-frame").src=selected.path;
+    document.getElementById("vp-title").innerText=selected.title;
+    view.style.display="flex";
+    setTimeout(()=>view.classList.add("active"),50);
+}
 
-    <div id="login-overlay" class="login-overlay">
-        <div class="login-card">
-            <h2>HoHo Games</h2>
-            <p>Create your account to unlock all features.</p>
-            <input type="text" id="username-input" placeholder="Username" required>
-            <input type="password" id="password-input" placeholder="Password (4+ characters)" required>
-            
-            <div class="file-upload-box">
-                <label for="initial-profile-pic-input" id="initial-pic-text">
-                    👤 Select Profile Picture
-                </label>
-                <input type="file" id="initial-profile-pic-input" accept="image/*">
-            </div>
-            
-            <button id="login-create" class="login-button">Create Account</button>
-        </div>
-    </div>
-    
-    <div id="re-login-overlay" class="login-overlay hidden">
-        <div class="login-card">
-            <h2 id="welcome-back-msg">Welcome back, User!</h2>
-            <p>Enter your password to continue.</p>
-            <input type="password" id="re-password-input" placeholder="Password" required>
-            <button id="re-login-btn" class="login-button">Log In</button>
-            <span id="forgot-password-link">Forgot Password? (Reset Account)</span>
-        </div>
-    </div>
+function exitGame(){
+    const view=document.getElementById("game-view");
+    view.classList.remove("active");
+    setTimeout(()=>{
+        view.style.display="none";
+        document.getElementById("game-frame").src="";
+        selected=null;
+        document.getElementById("main-hub").classList.remove("hub-exit");
+    },600);
+}
 
+function cancelLaunch(){
+    document.getElementById("pre-launcher").classList.remove("active");
+    document.getElementById("main-hub").classList.remove("hub-exit");
+}
 
-    <script> 
-        // --- CORE UTILITY FUNCTIONS ---
+function launchTab(){ if(selected) window.open(selected.path,"_blank"); }
 
-        // Click sound setup 
-        const clickSound = document.getElementById("click-sound"); 
-        function playClick() { 
-            // Check if the sound file actually exists (prevents console errors if user doesn't have it)
-            if (clickSound && clickSound.src) {
-                clickSound.currentTime = 0; 
-                clickSound.play().catch(() => {}); // Catch error if sound is blocked
-            }
-        } 
-        // Attach click sound to all interactive elements
-        document.querySelectorAll("button").forEach(btn => btn.addEventListener("click", playClick)); 
-        document.getElementById("login-create").addEventListener("click", playClick);
-        document.getElementById("re-login-btn").addEventListener("click", playClick);
+function stealthMode(){
+    if(!selected)return;
+    const win=window.open("about:blank","_blank");
+    win.document.write(`<title>Classes</title><iframe src="${selected.path}" style="width:100vw;height:100vh;border:none"></iframe>`);
+}
 
-        // Time Display
-        const timeDisplay = document.getElementById("current-time");
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            });
-            timeDisplay.textContent = timeString;
-        }
-        setInterval(updateTime, 1000);
-        updateTime(); // Initial call
+function setTab(){
+    const v=document.getElementById("cloak-picker").value;
+    if(v==="classroom")document.title="Classes";
+    else if(v==="drive")document.title="My Drive";
+    else document.title="HoHo Games";
+}
 
-        // --- PARTICLE SYSTEM ---
-        const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d"); 
-        function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
-        resize();
-        window.onresize=resize; 
+window.onkeydown=e=>{
+    if(e.key==="`")window.location.href=document.getElementById("panic-url").value;
+};
 
-        let particles=[],mode="stars"; 
-        for(let i=0;i<150;i++){
-            particles.push({
-                x:Math.random()*canvas.width,
-                y:Math.random()*canvas.height,
-                size:1 + Math.random()*2,
-                speedX:(Math.random()-.5)*0.3,
-                speedY:(Math.random()-.5)*0.3,
-                angle:Math.random()*360
-            });
-        } 
+function openModal(id){document.getElementById(id).classList.add("active")}
+function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("active"))}
+function doSearch(){
+    const t=document.getElementById("search").value.toLowerCase();
+    render(games.filter(g=>g.title.toLowerCase().includes(t)));
+}
 
-        function drawParticles(){
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            if(mode === "off") {
-                requestAnimationFrame(drawParticles);
-                return;
-            }
-            
-            particles.forEach(p=>{
-                if(mode==="stars"){
-                    ctx.fillStyle="rgba(255,255,255,0.8)";
-                    ctx.beginPath();
-                    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-                    ctx.fill();
-                }
-                if(mode==="bubbles"){
-                    ctx.strokeStyle="rgba(255,255,255,.5)";
-                    ctx.beginPath();
-                    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-                    ctx.stroke();
-                    p.y-=0.3; 
-                }
-                if(mode==="triangles"){
-                    ctx.fillStyle="rgba(255,255,255,.7)";
-                    ctx.save();
-                    ctx.translate(p.x,p.y);
-                    ctx.rotate(p.angle);
-                    ctx.beginPath();
-                    ctx.moveTo(0,-p.size);
-                    ctx.lineTo(p.size,p.size);
-                    ctx.lineTo(-p.size,p.size);
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.restore();
-                    p.angle+=0.01;
-                }
+render(games);
+</script>
 
-                p.x+=p.speedX;
-                p.y+=p.speedY;
-                
-                if(p.x<0)p.x=canvas.width;
-                if(p.x>canvas.width)p.x=0;
-                if(p.y<0)p.y=canvas.height;
-                if(p.y>canvas.height)p.y=0;
-            });
-            requestAnimationFrame(drawParticles);
-        } 
-        drawParticles(); 
-
-        // --- WALLPAPER FUNCTIONS ---
-        const wallpaperPanel = document.getElementById("wallpaper-panel");
-        const quickWallpaperBtn = document.getElementById("quick-wallpaper-btn");
-        const wallpaperUrlInput = document.getElementById("wallpaper-url-input");
-        const wallpaperFileInput = document.getElementById("wallpaper-file-input");
-        const wallpaperApplyBtn = document.getElementById("wallpaper-apply");
-        const wallpaperResetBtn = document.getElementById("wallpaper-reset");
-        
-        function applyWallpaper(source) {
-            document.body.style.setProperty('--wallpaper', `url('${source}')`);
-            localStorage.setItem('wallpaperSource', source);
-            // Hide particle canvas if an image is set
-            document.getElementById('particles').style.display = source ? 'none' : 'block';
-        }
-        
-        function resetWallpaper() {
-            document.body.style.setProperty('--wallpaper', 'var(--bg)');
-            localStorage.removeItem('wallpaperSource');
-            document.getElementById('particles').style.display = 'block';
-        }
-
-        wallpaperApplyBtn.addEventListener('click', () => {
-            if (wallpaperUrlInput.value) {
-                applyWallpaper(wallpaperUrlInput.value);
-            }
-            wallpaperPanel.classList.remove('active');
-        });
-
-        wallpaperResetBtn.addEventListener('click', () => {
-            resetWallpaper();
-            wallpaperPanel.classList.remove('active');
-        });
-
-        wallpaperFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    applyWallpaper(event.target.result);
-                    wallpaperPanel.classList.remove('active');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Load wallpaper from storage
-        const savedWallpaper = localStorage.getItem('wallpaperSource');
-        if (savedWallpaper) {
-            applyWallpaper(savedWallpaper);
-        } else {
-            document.getElementById('particles').style.display = 'block';
-        }
-
-        // --- SETTINGS (Theme/Panic) ---
-        const settingsPanel = document.getElementById("settings-panel");
-        const settingsSaveBtn = document.getElementById("settings-save");
-        const themePicker = document.getElementById("theme-picker");
-        const particleSelect = document.getElementById("particle-select");
-        const hotkeyInput = document.getElementById("hotkey-input");
-        const hotkeyDestination = document.getElementById("hotkey-destination");
-        const customUrlContainer = document.getElementById("custom-url-container");
-        const customUrlInput = document.getElementById("custom-url-input");
-
-        hotkeyDestination.addEventListener('change', () => {
-            customUrlContainer.style.display = hotkeyDestination.value === 'custom' ? 'flex' : 'none';
-        });
-
-        function loadSettings() {
-            // Load Theme
-            const savedTheme = localStorage.getItem('themeColor') || '#ff4757';
-            document.documentElement.style.setProperty('--accent', savedTheme);
-            themePicker.value = savedTheme;
-
-            // Load Particles
-            const savedParticles = localStorage.getItem('particleMode') || 'stars';
-            mode = savedParticles;
-            particleSelect.value = savedParticles;
-
-            // Load Panic Hotkey
-            const savedKey = localStorage.getItem('panicKey') || '`';
-            hotkeyInput.value = savedKey;
-
-            // Load Panic Destination
-            const savedDest = localStorage.getItem('panicDestination') || 'https://www.google.com/';
-            
-            if (['https://www.google.com/', 'https://www.wikipedia.org/'].includes(savedDest)) {
-                hotkeyDestination.value = savedDest;
-                customUrlContainer.style.display = 'none';
-            } else {
-                hotkeyDestination.value = 'custom';
-                customUrlInput.value = savedDest;
-                customUrlContainer.style.display = 'flex';
-            }
-        }
-
-        function saveSettings() {
-            localStorage.setItem('themeColor', themePicker.value);
-            document.documentElement.style.setProperty('--accent', themePicker.value);
-
-            localStorage.setItem('particleMode', particleSelect.value);
-            mode = particleSelect.value;
-            
-            const key = hotkeyInput.value.trim().toUpperCase().slice(0, 1) || '`';
-            localStorage.setItem('panicKey', key);
-
-            let destination = hotkeyDestination.value;
-            if (destination === 'custom') {
-                // If the user selects custom and types "about:blank" here, it works as a cloak!
-                destination = customUrlInput.value.trim() || 'about:blank'; 
-            }
-            localStorage.setItem('panicDestination', destination);
-            
-            settingsPanel.classList.remove('active');
-        }
-
-        settingsSaveBtn.addEventListener('click', saveSettings);
-        loadSettings();
-
-
-        // --- PANIC HOTKEY LISTENER ---
-        document.addEventListener('keydown', (e) => {
-            const panicKey = localStorage.getItem('panicKey');
-            const panicDest = localStorage.getItem('panicDestination');
-            
-            if (e.key.toUpperCase() === panicKey) {
-                e.preventDefault();
-                // Use location.replace to ensure the destination replaces the current history entry
-                window.location.replace(panicDest); 
-            }
-        });
-g
-
-        // --- GAME DATA (USING YOUR EXACT FORMAT: title, path, img) ---
-        const games = [
-            { title: "Tag", path: "games/Tag.html", img: "img/tag.png" }, 
-            { title: "eaglercraft", path: "games/eaglercraft.html", img: "img/eaglercraft.png" }, 
-            { title: "bad parenting", path: "games/badparenting/", img: "img/badparenting.png" }, 
-            { title: "bunny ada", path: "games/bunny-ada/", img: "img/bunnyada.gif" }, 
-            { title: "Get Yoked", path: "games/getyoked.html", img: "img/getyoked.png" }, 
-            { title: "PixelClient", path: "games/PixelClient.html", img: "img/getyoked.png" }, 
-            { title: "Walters Lab", path: "games/Walterlab.html", img: "img/walterlab.png" }, 
-        ];
-
-        // RENAME GAME KEYS TO MATCH YOUR FORMAT
-        // The game rendering function must be updated to use `path` for the URL and `img` for the image.
-        
-        const gamesGrid = document.getElementById("games-grid");
-        const gameSearch = document.getElementById("game-search");
-
-        function renderGames(filter = '') {
-            gamesGrid.innerHTML = '';
-            const filteredGames = games.filter(game => 
-                game.title.toLowerCase().includes(filter.toLowerCase())
-            );
-
-            filteredGames.forEach(game => {
-                const gameElement = document.createElement('div');
-                gameElement.className = 'game';
-                // USE 'path' AND 'img'
-                gameElement.setAttribute('data-url', game.path);
-                gameElement.setAttribute('data-title', game.title);
-                gameElement.innerHTML = `
-                    <img src="${game.img}" alt="${game.title}">
-                    <div class="game-title">${game.title}</div>
-                `;
-                gameElement.addEventListener('click', () => openGameViewer(game.path, game.title));
-                gamesGrid.appendChild(gameElement);
-            });
-            // Show the grid after loading
-            setTimeout(() => {
-                gamesGrid.classList.add('show');
-            }, 100);
-        }
-
-        gameSearch.addEventListener('input', (e) => {
-            renderGames(e.target.value);
-        });
-
-        // --- GAME VIEWER LOGIC ---
-        const gameViewer = document.getElementById('game-viewer');
-        const viewerTitle = document.getElementById('viewer-title');
-        const viewerFrame = document.getElementById('viewer-frame');
-        const viewerPlaceholder = document.querySelector('.viewer-placeholder');
-        const viewerCloseBtn = document.getElementById('viewer-close');
-        const viewerPlayBtn = document.getElementById('viewer-play');
-        const viewerNewTabBtn = document.getElementById('viewer-newtab');
-        const viewerNewTabBlankBtn = document.getElementById('viewer-newtab-blank');
-
-
-        function openGameViewer(url, title) {
-            viewerTitle.textContent = title;
-            gameViewer.setAttribute('data-src', url);
-            viewerFrame.src = ''; // Clear iframe src
-            viewerFrame.classList.remove('active'); // Hide frame
-            viewerPlaceholder.style.display = 'flex'; // Show placeholder
-            gameViewer.style.display = 'flex';
-            
-            // Allow CSS transition to take effect
-            setTimeout(() => gameViewer.classList.add('active'), 10);
-        }
-
-        viewerCloseBtn.addEventListener('click', () => {
-            gameViewer.classList.remove('active');
-            setTimeout(() => {
-                gameViewer.style.display = 'none';
-                viewerFrame.src = ''; // Stop the game when closed
-            }, 300);
-        });
-
-        viewerPlayBtn.addEventListener('click', () => {
-            const url = gameViewer.getAttribute('data-src');
-            viewerFrame.src = url;
-            viewerPlaceholder.style.display = 'none';
-            viewerFrame.style.display = 'block';
-            setTimeout(() => viewerFrame.classList.add('active'), 10);
-        });
-
-        viewerNewTabBtn.addEventListener('click', () => {
-            const url = gameViewer.getAttribute('data-src');
-            window.open(url, '_blank');
-            viewerCloseBtn.click(); // Close the viewer after launch
-        });
-
-        // --- THE CRUCIAL ABOUT:BLANK CLOAKING FUNCTION ---
-        viewerNewTabBlankBtn.addEventListener('click', () => {
-            const url = gameViewer.getAttribute('data-src');
-            
-            // 1. Open a new window and force it to about:blank immediately
-            const blankWindow = window.open('about:blank', '_blank');
-            
-            if (blankWindow) {
-                // 2. Write the game's iframe into the document of the blank window
-                // This keeps the URL bar as 'about:blank' but displays the game content
-                blankWindow.document.write(`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>${viewerTitle.textContent}</title>
-                        <style>
-                            body { margin: 0; padding: 0; overflow: hidden; background-color: #000; }
-                            iframe { width: 100vw; height: 100vh; border: none; }
-                        </style>
-                    </head>
-                    <body>
-                        <iframe src="${url}" allowfullscreen></iframe>
-                    </body>
-                    </html>
-                `);
-                blankWindow.document.close();
-            } else {
-                // Fallback if pop-up blocker prevents opening
-                alert("Please disable your pop-up blocker to use the stealth launch feature.");
-            }
-
-            viewerCloseBtn.click(); // Close the viewer after launch
-        });
-
-
-        // --- ACCOUNT LOGIC (Simplified) ---
-        const loginOverlay = document.getElementById('login-overlay');
-        const reLoginOverlay = document.getElementById('re-login-overlay');
-        const loginCreateBtn = document.getElementById('login-create');
-        const reLoginBtn = document.getElementById('re-login-btn');
-        const usernameInput = document.getElementById('username-input');
-        const passwordInput = document.getElementById('password-input');
-        const rePasswordInput = document.getElementById('re-password-input');
-        const initialProfilePicInput = document.getElementById('initial-profile-pic-input');
-        const initialPicText = document.getElementById('initial-pic-text');
-        const headerUsername = document.getElementById('header-username');
-        const accountPanel = document.getElementById('account-panel');
-        const profilePicElement = document.getElementById('profile-pic');
-        const headerProfilePicElement = document.getElementById('header-profile-pic');
-        const logoutBtn = document.getElementById('logout-btn');
-        const accountBtn = document.getElementById('account-btn');
-        const settingsBtn = document.getElementById('settings-btn');
-        const userDisplay = document.getElementById('user-display');
-        const profilePicUploader = document.getElementById('profile-pic-input');
-        const profileSelector = document.getElementById('profile-selector');
-        
-        let loggedIn = false;
-        let profilePicData = 'images2/acc.png'; 
-
-        // Initial check on load
-        function checkLoginStatus() {
-            const storedUser = localStorage.getItem('username');
-            const storedPass = localStorage.getItem('password');
-            const storedPic = localStorage.getItem('profilePicData');
-
-            if (storedUser && storedPass) {
-                loggedIn = true;
-                reLoginOverlay.querySelector('#welcome-back-msg').textContent = `Welcome back, ${storedUser}!`;
-                document.getElementById('display-name').textContent = storedUser;
-                document.getElementById('display-username').textContent = `@${storedUser.toLowerCase().replace(/\s/g, '')}`;
-                
-                if (storedPic) {
-                    profilePicData = storedPic;
-                    profilePicElement.src = storedPic;
-                    headerProfilePicElement.src = storedPic;
-                }
-                
-                loginOverlay.classList.add('hidden');
-                reLoginOverlay.classList.remove('hidden');
-                renderGames();
-            } else {
-                // First time user
-                loginOverlay.classList.remove('hidden');
-            }
-        }
-
-        // --- Utility to update all profile pics ---
-        function updateProfilePics(src) {
-            profilePicData = src;
-            localStorage.setItem('profilePicData', src);
-            profilePicElement.src = src;
-            headerProfilePicElement.src = src;
-        }
-
-        // Initial Profile Pic Upload Preview
-        initialProfilePicInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                initialPicText.textContent = `✅ ${file.name}`;
-            }
-        });
-
-        // Account Creation
-        loginCreateBtn.addEventListener('click', () => {
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value;
-            
-            if (username.length < 3 || password.length < 4) {
-                alert("Username must be at least 3 characters and password 4 characters.");
-                return;
-            }
-
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password); 
-            
-            // Handle initial profile picture upload
-            const file = initialProfilePicInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    updateProfilePics(event.target.result);
-                    finalizeLogin(username);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Use default image if no file is uploaded
-                updateProfilePics('images2/acc.png');
-                finalizeLogin(username);
-            }
-        });
-
-        // Finalize Login function
-        function finalizeLogin(username) {
-            loggedIn = true;
-            headerUsername.textContent = username;
-            userDisplay.style.display = 'flex';
-            loginOverlay.classList.add('hidden');
-            reLoginOverlay.classList.add('hidden');
-            document.title = "HoHo Games"; 
-            renderGames();
-        }
-
-        // Re-Login
-        reLoginBtn.addEventListener('click', () => {
-            const password = rePasswordInput.value;
-            const storedPass = localStorage.getItem('password');
-            const storedUser = localStorage.getItem('username');
-
-            if (password === storedPass) {
-                finalizeLogin(storedUser);
-            } else {
-                alert("Incorrect password.");
-            }
-        });
-
-        // Forgot Password / Reset Account
-        document.getElementById('forgot-password-link').addEventListener('click', () => {
-            if (confirm("Are you sure you want to reset your account? This will erase your username, password, and profile picture.")) {
-                localStorage.clear();
-                window.location.reload(); 
-            }
-        });
-
-        // Account Hub Profile Pic Upload
-        profilePicUploader.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    updateProfilePics(event.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // Account Hub Profile Selector
-        profileSelector.querySelectorAll('.profile-option img').forEach(img => {
-            img.addEventListener('click', (e) => {
-                updateProfilePics(e.target.getAttribute('data-src'));
-            });
-        });
-
-        // Logout
-        logoutBtn.addEventListener('click', () => {
-            loggedIn = false;
-            localStorage.removeItem('username');
-            localStorage.removeItem('password');
-            localStorage.removeItem('profilePicData');
-            window.location.reload(); 
-        });
-
-        // Panel Toggle Buttons
-        settingsBtn.addEventListener('click', () => {
-            settingsPanel.classList.toggle('active');
-            accountPanel.classList.remove('active');
-            wallpaperPanel.classList.remove('active');
-        });
-
-        accountBtn.addEventListener('click', () => {
-            accountPanel.classList.toggle('active');
-            settingsPanel.classList.remove('active');
-            wallpaperPanel.classList.remove('active');
-        });
-        
-        quickWallpaperBtn.addEventListener('click', () => {
-            wallpaperPanel.classList.toggle('active');
-            settingsPanel.classList.remove('active');
-            accountPanel.classList.remove('active');
-        });
-
-        // Hide panels when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!settingsPanel.contains(e.target) && e.target !== settingsBtn && settingsPanel.classList.contains('active')) {
-                settingsPanel.classList.remove('active');
-            }
-            if (!accountPanel.contains(e.target) && e.target !== accountBtn && accountPanel.classList.contains('active')) {
-                accountPanel.classList.remove('active');
-            }
-            if (!wallpaperPanel.contains(e.target) && e.target !== quickWallpaperBtn && wallpaperPanel.classList.contains('active')) {
-                wallpaperPanel.classList.remove('active');
-            }
-        });
-
-        // Run the initial check
-        checkLoginStatus();
-
-    </script>
 </body>
 </html>
-
